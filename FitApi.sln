@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fit.Infrastructure", "Fit.I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fit.Common", "Fit.Common\Fit.Common.csproj", "{95CA0037-280F-4FD4-8549-86F9EF8A2EC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIt.Entities", "FIt.Entities\FIt.Entities.csproj", "{FDA48364-FE7F-4E3F-9A35-F21B1CE303DE}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,10 +39,6 @@ Global
 		{95CA0037-280F-4FD4-8549-86F9EF8A2EC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95CA0037-280F-4FD4-8549-86F9EF8A2EC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95CA0037-280F-4FD4-8549-86F9EF8A2EC2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FDA48364-FE7F-4E3F-9A35-F21B1CE303DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FDA48364-FE7F-4E3F-9A35-F21B1CE303DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FDA48364-FE7F-4E3F-9A35-F21B1CE303DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FDA48364-FE7F-4E3F-9A35-F21B1CE303DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
