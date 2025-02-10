@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Fit.Application\Fit.Application.csproj" />
     <ProjectReference Include="..\Fit.Common\Fit.Common.csproj" />
     <ProjectReference Include="..\Fit.Infrastructure\Fit.Infrastructure.csproj" />
   </ItemGroup>

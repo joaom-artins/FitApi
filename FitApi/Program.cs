@@ -1,11 +1,16 @@
 using System.Text;
+using Fit.API.Filters;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 using Fit.Common;
 using Fit.Domain.Entities;
 using Fit.Infrastructure.Persistence.Context;
-using Fit.Infrastructure.Persistence.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Fit.Infrastructure.Persistence.Utils;
+using Fit.Application.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +19,22 @@ builder.Services.Configure<AppSettings>(appSettingsSection);
 var appSettings = appSettingsSection.Get<AppSettings>();
 
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddAPplication();
+
+builder.Services
+.AddControllers(options =>
+{
+    options.ModelValidatorProviders.Clear();
+    options.Filters.Add(new ConsumesAttribute("application/json"));
+    options.Filters.Add(new ProducesAttribute("application/json"));
+    options.Filters.Add<NotificationFilter>();
+})
+.AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+});
 
 builder.Services.AddControllers();
 
