@@ -18,10 +18,11 @@
 
   <ItemGroup>
     <Folder Include="DTOs\Responses\" />
-    <Folder Include="DTOs\Requests\" />
     <Folder Include="Interfaces\IServices\" />
-    <Folder Include="Services\" />
-    <Folder Include="Validators\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Fit.Domain\Fit.Domain.csproj" />
   </ItemGroup>
 
 </Project>
