@@ -1,4 +1,4 @@
-﻿using Fit.Application.Interfaces.Repositories;
+﻿using Fit.Application.Interfaces.IRepositories;
 using Fit.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;

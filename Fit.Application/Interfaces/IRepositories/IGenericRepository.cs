@@ -1,4 +1,4 @@
-﻿namespace Fit.Application.Interfaces.Repositories;
+﻿namespace Fit.Application.Interfaces.IRepositories;
 
 public interface IGenericRepository<T> where T : class
 {

@@ -17,6 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="DTOs\Responses\" />
+    <Folder Include="DTOs\Requests\" />
+    <Folder Include="Interfaces\IServices\" />
+    <Folder Include="Services\" />
     <Folder Include="Validators\" />
   </ItemGroup>
 

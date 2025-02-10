@@ -1,4 +1,5 @@
-﻿using Fit.Application.Interfaces.Repositories;
+﻿using Fit.Application.Interfaces.IRepositories;
+using Fit.Application.UnitOfWork;
 using Fit.Infrastructure.Persistence.Context;
 using Fit.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ public static class DependencyInjection
                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
 
         return services;
     }
