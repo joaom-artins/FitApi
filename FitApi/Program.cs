@@ -29,6 +29,7 @@ builder.Services
     options.Filters.Add(new ConsumesAttribute("application/json"));
     options.Filters.Add(new ProducesAttribute("application/json"));
     options.Filters.Add<NotificationFilter>();
+    options.Filters.Add<ValidationFilter>();
 })
 .AddJsonOptions(options =>
 {
