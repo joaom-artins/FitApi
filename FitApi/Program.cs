@@ -12,6 +12,8 @@ using Microsoft.IdentityModel.Tokens;
 using Fit.Infrastructure.Persistence.Utils;
 using Fit.Application.Utils;
 using Fit.API.Middlewares;
+using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +23,8 @@ var appSettings = appSettingsSection.Get<AppSettings>();
 
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddAPplication();
+
+builder.Services.AddHttpContextAccessor();
 
 builder.Services
 .AddControllers(options =>
@@ -37,6 +41,14 @@ builder.Services
     options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 });
+
+builder.Services.AddSingleton<JsonSerializerOptions>(new JsonSerializerOptions
+{
+    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+    WriteIndented = true 
+});
+
+ValidatorOptions.Global.DefaultRuleLevelCascadeMode = CascadeMode.Stop;
 
 builder.Services.AddControllers();
 
@@ -71,11 +83,18 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ExceptionMiddleware>();
+app.UseMiddleware<AuthorizationMiddleware>();
+
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
+app.MapControllers().RequireAuthorization();
 
-app.MapControllers();
+using (var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+{
+    var dbContext = serviceScope.ServiceProvider.GetService<AppDbContext>();
+    dbContext!.Database.Migrate();
+}
 
 app.Run();

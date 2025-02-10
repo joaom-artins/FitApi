@@ -1,4 +1,6 @@
-﻿using Fit.Infrastructure.Persistence.Context;
+﻿using Fit.Application.Interfaces.Repositories;
+using Fit.Infrastructure.Persistence.Context;
+using Fit.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +13,8 @@ public static class DependencyInjection
     {
         services.AddDbContext<AppDbContext>(options =>
                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+
+        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
         return services;
     }

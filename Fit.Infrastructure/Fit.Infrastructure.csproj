@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Fit.Application\Fit.Application.csproj" />
     <ProjectReference Include="..\Fit.Domain\Fit.Domain.csproj" />
   </ItemGroup>
 
