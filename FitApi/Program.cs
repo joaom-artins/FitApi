@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Fit.Infrastructure.Persistence.Utils;
 using Fit.Application.Utils;
+using Fit.API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,6 +68,8 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 
