@@ -18,10 +18,10 @@
 
   <ItemGroup>
     <Folder Include="DTOs\Responses\" />
-    <Folder Include="Interfaces\IServices\" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Fit.Common\Fit.Common.csproj" />
     <ProjectReference Include="..\Fit.Domain\Fit.Domain.csproj" />
   </ItemGroup>
 
