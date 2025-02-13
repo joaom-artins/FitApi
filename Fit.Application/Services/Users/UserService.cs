@@ -8,13 +8,13 @@ using Fit.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 
-namespace Fit.Application.Services;
+namespace Fit.Application.Services.Users;
 
 public class UserService(
     INotificationContext _notificationContext,
     IUnitOfWork _unitOfWork,
-    UserManager<UserEntity> _userManager,
-    IGenericRepository<UserEntity> _userRepository
+    UserManager<UserModel> _userManager,
+    IGenericRepository<UserModel> _userRepository
 ) : IUserService
 {
     public async Task<bool> CreateAsync(UserCreateRequest request)
@@ -53,7 +53,7 @@ public class UserService(
 
         _unitOfWork.BeginTransaction();
 
-        var result = await _userManager.CreateAsync(new UserEntity
+        var result = await _userManager.CreateAsync(new UserModel
         {
             Email = request.Email,
             NormalizedUserName = request.UserName,

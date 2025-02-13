@@ -13,6 +13,9 @@ public class NotificationMessage
     {
         public static readonly string PasswordAreDifferent = "As senhas são diferentes!";
         public static readonly string EmailAlreadyExists = "Esse email já foi cadastrado!";
+        public static readonly string InvalidData = "Dados inválidos!";
+        public static readonly string InvalidToken = "Token inválido!";
         public static readonly string UserNameAlreadyExists = "Esse nome de usuário já foi cadastrado!";
+        public static readonly string NotFound = "Usuário não encontrado!";
     }
 }

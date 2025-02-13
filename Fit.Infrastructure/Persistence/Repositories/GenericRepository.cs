@@ -38,7 +38,7 @@ public class GenericRepository<T>(AppDbContext context) : IGenericRepository<T> 
 
     }
 
-    public async void AddAsync(T t)
+    public async Task AddAsync(T t)
     {
         await context.Set<T>().AddAsync(t);
     }

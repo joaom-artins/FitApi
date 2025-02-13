@@ -14,6 +14,7 @@ using Fit.Application.Utils;
 using Fit.API.Middlewares;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,9 +55,11 @@ builder.Services.AddControllers();
 
 builder.Services.AddOpenApi();
 
-builder.Services.AddIdentity<UserEntity, IdentityRole<Guid>>()
+builder.Services.AddIdentity<UserModel, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.AddSingleton(sp => sp.GetRequiredService<IOptions<AppSettings>>().Value);
 
 builder.Services.AddAuthentication(auth =>
 {
