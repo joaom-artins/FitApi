@@ -7,14 +7,17 @@ using Fit.Application.UnitOfWork;
 using Fit.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Fit.Common.LoggedUser.interfaces;
+using Fit.Application.Interfaces.IRepositories.User;
 
 namespace Fit.Application.Services.Users;
 
 public class UserService(
     INotificationContext _notificationContext,
+    IGetLoggedUser _getLoggedUser,
     IUnitOfWork _unitOfWork,
     UserManager<UserModel> _userManager,
-    IGenericRepository<UserModel> _userRepository
+    IUserRepository _userRepository
 ) : IUserService
 {
     public async Task<bool> CreateAsync(UserCreateRequest request)
@@ -29,25 +32,9 @@ public class UserService(
             return false;
         }
 
-        var existsEmail = await _userRepository.GetByGenericPropertyAsync("Email", request.Email);
-        if (existsEmail != null)
+        await ExistsByEmailOrUserName(request.Email, request.UserName);
+        if (_notificationContext.HasNotifications)
         {
-            _notificationContext.SetDetails(
-               statusCode: StatusCodes.Status409Conflict,
-               title: NotificationTitle.Conflict,
-               detail: NotificationMessage.User.EmailAlreadyExists
-            );
-            return false;
-        }
-
-        var existsUserName = await _userRepository.GetByGenericPropertyAsync("UserName", request.UserName);
-        if (existsUserName != null)
-        {
-            _notificationContext.SetDetails(
-               statusCode: StatusCodes.Status409Conflict,
-               title: NotificationTitle.Conflict,
-               detail: NotificationMessage.User.UserNameAlreadyExists
-            );
             return false;
         }
 
@@ -85,6 +72,84 @@ public class UserService(
         }
 
         await _unitOfWork.CommitAsync(true);
+
+        return true;
+    }
+
+    public async Task<bool> UpdateAsync(UserUpdateRequest request)
+    {
+        await ExistsByEmailOrUserNameExcludingId(_getLoggedUser.GetId(), request.Email, request.UserName);
+        if (_notificationContext.HasNotifications)
+        {
+            return false;
+        }
+
+
+        var user = await _userRepository.GetByIdAsync(_getLoggedUser.GetId());
+        if (user is null)
+        {
+            _notificationContext.SetDetails(
+                statusCode: StatusCodes.Status404NotFound,
+                title: NotificationTitle.NotFound,
+                detail: NotificationMessage.User.NotFound
+            );
+            return false;
+        }
+
+        user.Name = request.Name;
+        user.Email = request.Email;
+        _userRepository.Update(user);
+        await _unitOfWork.CommitAsync();
+
+        return true;
+    }
+
+    private async Task<bool> ExistsByEmailOrUserNameExcludingId(Guid id, string email, string username)
+    {
+        var userExists = await _userRepository.GetByEmailOrUserNameExcludingIdAsync(id, email, username);
+        if (userExists.Any())
+        {
+            if (userExists.Any(x => x.UserName == username))
+            {
+                _notificationContext.AddNotification("Username", NotificationMessage.User.UserNameAlreadyExists);
+            }
+            if (userExists.Any(x => x.Email == email))
+            {
+                _notificationContext.AddNotification("Email", NotificationMessage.User.EmailAlreadyExists);
+            }
+
+            _notificationContext.SetDetails(
+                statusCode: StatusCodes.Status409Conflict,
+                title: NotificationTitle.Conflict,
+                detail: NotificationMessage.Common.DataExists
+            );
+            return default!;
+        }
+
+        return true;
+    }
+
+    private async Task<bool> ExistsByEmailOrUserName(string email, string username)
+    {
+        var userExists = await _userRepository.GetByEmailOrUserNameAsync(email, username);
+        if (userExists.Any())
+        {
+            if (userExists.Any(x => x.UserName == username))
+            {
+                _notificationContext.AddNotification("Username", NotificationMessage.User.UserNameAlreadyExists);
+            }
+            if (userExists.Any(x => x.Email == email))
+            {
+                _notificationContext.AddNotification("Email", NotificationMessage.User.EmailAlreadyExists);
+            }
+
+            _notificationContext.SetDetails(
+                statusCode: StatusCodes.Status409Conflict,
+                title: NotificationTitle.Conflict,
+                detail: NotificationMessage.Common.DataExists
+            );
+            return default!;
+        }
 
         return true;
     }

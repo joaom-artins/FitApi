@@ -11,7 +11,7 @@ namespace Fit.Application.Utils;
 
 public static partial class DependencyInjection
 {
-    public static IServiceCollection AddAPplication(this IServiceCollection services)
+    public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddScoped<INotificationContext, NotificationContext>();
         services.AddScoped<IUserService, UserService>();

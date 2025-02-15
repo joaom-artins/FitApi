@@ -19,4 +19,13 @@ public class UserController(
 
         return NoContent();
     }
+
+    [HttpPatch]
+    [Authorize(Roles = "User")]
+    public async Task<IActionResult> Update([FromBody] UserUpdateRequest request)
+    {
+        await _userService.UpdateAsync(request);
+
+        return NoContent();
+    }
 }

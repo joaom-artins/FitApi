@@ -1,4 +1,4 @@
-CREATE DATABASE invite COLLATE Latin1_General_100_CI_AS_SC_UTF8;
+CREATE DATABASE fit COLLATE Latin1_General_100_CI_AS_SC_UTF8;
 GO
 
 USE fit;
@@ -10,5 +10,5 @@ GO
 CREATE USER fit FOR LOGIN fit;
 GO
 
-EXEC sp_addrolemember 'db_owner', 'invite';
+ALTER ROLE db_owner ADD MEMBER fit;
 GO

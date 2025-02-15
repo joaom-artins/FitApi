@@ -15,6 +15,8 @@ using Fit.API.Middlewares;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Fit.Common.Utils;
+using Fit.Application.DTOs.Requests.Login;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +25,8 @@ builder.Services.Configure<AppSettings>(appSettingsSection);
 var appSettings = appSettingsSection.Get<AppSettings>();
 
 builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddAPplication();
+builder.Services.AddApplication();
+builder.Services.AddCommons();
 
 builder.Services.AddHttpContextAccessor();
 
@@ -46,10 +49,11 @@ builder.Services
 builder.Services.AddSingleton<JsonSerializerOptions>(new JsonSerializerOptions
 {
     PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-    WriteIndented = true 
+    WriteIndented = true
 });
 
 ValidatorOptions.Global.DefaultRuleLevelCascadeMode = CascadeMode.Stop;
+builder.Services.AddValidatorsFromAssemblyContaining<LoginRequest>();
 
 builder.Services.AddControllers();
 
