@@ -27,7 +27,7 @@ public class UserCreateRequestValidator : AbstractValidator<UserCreateRequest>
             .IsInEnum().WithMessage("Tipo de usuário inválido!");
 
         RuleFor(x => x.Password)
-            .NotEmpty().WithMessage("Senha é umcampo obrigatório!")
+            .NotEmpty().WithMessage("Senha é um campo obrigatório!")
             .Matches(RegexStrings.Password).WithMessage("Senha deve ter pelo menos 1 caractere maiúsculo, 1 minúsculo e 1 especial");
     }
 }

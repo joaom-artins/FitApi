@@ -28,4 +28,13 @@ public class UserController(
 
         return NoContent();
     }
+
+    [HttpPatch("update-password")]
+    [Authorize(Roles = "User")]
+    public async Task<IActionResult> ChangePassword([FromBody] UserUpdatePasswordRequest request)
+    {
+        await _userService.UpdatePasswordAsync(request);
+
+        return NoContent();
+    }
 }

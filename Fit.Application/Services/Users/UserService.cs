@@ -104,6 +104,43 @@ public class UserService(
         return true;
     }
 
+    public async Task<bool> UpdatePasswordAsync(UserUpdatePasswordRequest request)
+    {
+        if (request.NewPassword != request.ConfirmNewPassword)
+        {
+            _notificationContext.SetDetails(
+                statusCode: StatusCodes.Status400BadRequest,
+                title: NotificationTitle.BadRequest,
+                detail: NotificationMessage.User.PasswordAreDifferent
+            );
+            return false;
+        }
+
+        var user = await _userManager.FindByIdAsync(_getLoggedUser.GetId().ToString());
+        if (user is null)
+        {
+            _notificationContext.SetDetails(
+                statusCode: StatusCodes.Status400BadRequest,
+                title: NotificationTitle.BadRequest,
+                detail: NotificationMessage.User.NotFound
+            );
+            return false;
+        }
+
+        var result = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
+        if (!result.Succeeded)
+        {
+            _notificationContext.SetDetails(
+                statusCode: StatusCodes.Status500InternalServerError,
+                title: NotificationTitle.BadRequest,
+                detail: NotificationMessage.Common.UnexpectedError
+            );
+            return false;
+        }
+
+        return true;
+    }
+
     private async Task<bool> ExistsByEmailOrUserNameExcludingId(Guid id, string email, string username)
     {
         var userExists = await _userRepository.GetByEmailOrUserNameExcludingIdAsync(id, email, username);

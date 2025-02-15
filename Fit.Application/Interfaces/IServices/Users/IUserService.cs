@@ -6,4 +6,5 @@ public interface IUserService
 {
     Task<bool> CreateAsync(UserCreateRequest request);
     Task<bool> UpdateAsync(UserUpdateRequest request);
+    Task<bool> UpdatePasswordAsync(UserUpdatePasswordRequest request);
 }
