@@ -8,7 +8,9 @@ namespace Fit.Infrastructure.Persistence.Context;
 public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<UserModel, IdentityRole<Guid>, Guid>(options)
 {
     public override DbSet<UserModel> Users { get; set; } = default!;
-    public  DbSet<UserRefreshTokenModel> UserRefreshTokens { get; set; } = default!;
+    public DbSet<UserRefreshTokenModel> UserRefreshTokens { get; set; } = default!;
+    public DbSet<WorkoutModel> Workouts { get; set; } = default!;
+    public DbSet<ExerciseModel> Excersises { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
