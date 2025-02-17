@@ -10,6 +10,11 @@ public class NotificationMessage
         public static readonly string DataExists = "Dados já cadastrados";
     }
 
+    public static class Workout
+    {
+        public static readonly string OnlyPersonal = "Apenas personals podem prescrever treino!";
+    }
+
     public static class User
     {
         public static readonly string PasswordAreDifferent = "As senhas são diferentes!";
