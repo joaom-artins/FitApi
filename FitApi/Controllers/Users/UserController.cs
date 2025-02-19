@@ -21,7 +21,6 @@ public class UserController(
     }
 
     [HttpPatch]
-    [Authorize(Roles = "User")]
     public async Task<IActionResult> Update([FromBody] UserUpdateRequest request)
     {
         await _userService.UpdateAsync(request);
@@ -30,7 +29,6 @@ public class UserController(
     }
 
     [HttpPatch("update-password")]
-    [Authorize(Roles = "User")]
     public async Task<IActionResult> ChangePassword([FromBody] UserUpdatePasswordRequest request)
     {
         await _userService.UpdatePasswordAsync(request);

@@ -18,6 +18,7 @@ public class ExerciseService(
             Reps = request.Reps,
             Series = request.Series,
             WorkoutId = workoutId,
+            Exercise = request.Exercise,
         };
         await _exerciseRepository.AddAsync(exerciseModel);
         await _unitOfWork.CommitAsync();

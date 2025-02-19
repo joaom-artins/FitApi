@@ -180,7 +180,8 @@ namespace Fit.Infrastructure.Migrations
 
                     b.HasIndex("CreatedById");
 
-                    b.HasIndex("ForId");
+                    b.HasIndex("ForId")
+                        .IsUnique();
 
                     b.ToTable("Workouts");
                 });
@@ -352,12 +353,12 @@ namespace Fit.Infrastructure.Migrations
                     b.HasOne("Fit.Domain.Entities.UserModel", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Fit.Domain.Entities.UserModel", "For")
-                        .WithMany()
-                        .HasForeignKey("ForId")
+                        .WithOne()
+                        .HasForeignKey("Fit.Domain.Entities.WorkoutModel", "ForId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

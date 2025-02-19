@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Fit.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateWorkoutExercise : Migration
+    public partial class CreateExerciseWorkout : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -29,7 +29,7 @@ namespace Fit.Infrastructure.Migrations
                         column: x => x.CreatedById,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Workouts_Users_ForId",
                         column: x => x.ForId,
@@ -72,7 +72,8 @@ namespace Fit.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Workouts_ForId",
                 table: "Workouts",
-                column: "ForId");
+                column: "ForId",
+                unique: true);
         }
 
         /// <inheritdoc />

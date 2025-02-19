@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fit.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250217223017_Create-Workout-Exercise")]
-    partial class CreateWorkoutExercise
+    [Migration("20250219224240_Create-Exercise-Workout")]
+    partial class CreateExerciseWorkout
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -183,7 +183,8 @@ namespace Fit.Infrastructure.Migrations
 
                     b.HasIndex("CreatedById");
 
-                    b.HasIndex("ForId");
+                    b.HasIndex("ForId")
+                        .IsUnique();
 
                     b.ToTable("Workouts");
                 });
@@ -355,12 +356,12 @@ namespace Fit.Infrastructure.Migrations
                     b.HasOne("Fit.Domain.Entities.UserModel", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Fit.Domain.Entities.UserModel", "For")
-                        .WithMany()
-                        .HasForeignKey("ForId")
+                        .WithOne()
+                        .HasForeignKey("Fit.Domain.Entities.WorkoutModel", "ForId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -16,6 +16,18 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.Entity<WorkoutModel>()
+        .HasOne(w => w.CreatedBy)
+        .WithMany()
+        .HasForeignKey(w => w.CreatedById)
+        .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<WorkoutModel>()
+            .HasOne(w => w.For)
+            .WithOne()
+            .HasForeignKey<WorkoutModel>(w => w.ForId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         modelBuilder.Entity<UserModel>().ToTable("Users");
         modelBuilder.Entity<IdentityRole<Guid>>().ToTable("Roles");
         modelBuilder.Entity<IdentityRoleClaim<Guid>>().ToTable("RolesClaim");
