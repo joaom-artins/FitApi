@@ -1,9 +1,11 @@
 ﻿using Fit.Application.Interfaces.IRepositories;
+using Fit.Application.Interfaces.IRepositories.Exercise;
 using Fit.Application.Interfaces.IRepositories.User;
 using Fit.Application.Interfaces.IRepositories.Workout;
 using Fit.Application.UnitOfWork;
 using Fit.Infrastructure.Persistence.Context;
 using Fit.Infrastructure.Persistence.Repositories;
+using Fit.Infrastructure.Persistence.Repositories.Exercise;
 using Fit.Infrastructure.Persistence.Repositories.User;
 using Fit.Infrastructure.Persistence.Repositories.Workout;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +24,7 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
+        services.AddScoped<IExerciseRepository, ExerciseRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IWorkoutRepository, WorkoutRepository>();
 

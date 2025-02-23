@@ -25,4 +25,9 @@ public class NotificationMessage
         public static readonly string UserNameAlreadyExists = "Esse nome de usuário já foi cadastrado!";
         public static readonly string NotFound = "Usuário não encontrado!";
     }
+
+    public static class Exercise
+    {
+        public static readonly string NotFound = "Exercício não encontrado!";
+    }
 }
