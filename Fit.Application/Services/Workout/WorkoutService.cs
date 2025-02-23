@@ -2,6 +2,7 @@ using Fit.Application.DTOs.Requests.Workout;
 using Fit.Application.Interfaces;
 using Fit.Application.Interfaces.IRepositories;
 using Fit.Application.Interfaces.IRepositories.User;
+using Fit.Application.Interfaces.IRepositories.Workout;
 using Fit.Application.Interfaces.IServices.Exercise;
 using Fit.Application.Interfaces.IServices.Workout;
 using Fit.Application.Notification;
@@ -16,7 +17,7 @@ public class WorkoutService(
     IGetLoggedUser _getLoggedUser,
     INotificationContext _notificationContext,
     IUnitOfWork _unitOfWork,
-    IGenericRepository<WorkoutModel> _workoutRepository,
+    IWorkoutRepository _workoutRepository,
     IExerciseService _exerciseService,
     IUserRepository _userRepository
 ) : IWorkoutService
@@ -66,6 +67,27 @@ public class WorkoutService(
         }
 
         await _unitOfWork.CommitAsync(true);
+
+        return true;
+    }
+
+    public async Task<bool> UpdateAsync(Guid id, WorkoutUpdateRequest request)
+    {
+        var record = await _workoutRepository.GetByIdAnCreatorAsync(id, _getLoggedUser.GetId());
+        if (record is null)
+        {
+            _notificationContext.SetDetails(
+                statusCode: StatusCodes.Status404NotFound,
+                title: NotificationTitle.NotFound,
+                detail: NotificationMessage.Workout.NotFound
+            );
+            return false;
+        }
+
+        record.Name = request.Name;
+        record.DaysOfWeek = request.DaysOfWeek;
+        _workoutRepository.Update(record);
+        await _unitOfWork.CommitAsync();
 
         return true;
     }

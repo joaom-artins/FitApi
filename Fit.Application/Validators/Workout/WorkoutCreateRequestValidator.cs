@@ -20,7 +20,7 @@ public class WorkoutCreateRequestValidator : AbstractValidator<WorkoutCreateRequ
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Nome do treino é um campo obrigatório!")
             .MinimumLength(5).WithMessage("Nome deve ter pelo menos 5 caracteres!")
-            .MaximumLength(35).WithMessage("Nome deve ter pelo menos 35 caracteres!");
+            .MaximumLength(60).WithMessage("Nome deve ter pelo menos 60 caracteres!");
 
         RuleFor(x => x.StudentId)
              .Must((workout, forId) =>

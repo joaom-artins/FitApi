@@ -12,9 +12,17 @@ public class WorkoutController(
 ) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> CreateAsync([FromBody] WorkoutCreateRequest request)
+    public async Task<IActionResult> Create([FromBody] WorkoutCreateRequest request)
     {
         await _workoutService.CreateAsync(request);
+
+        return NoContent();
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] WorkoutUpdateRequest request)
+    {
+        await _workoutService.UpdateAsync(id, request);
 
         return NoContent();
     }

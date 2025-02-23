@@ -13,6 +13,7 @@ public class NotificationMessage
     public static class Workout
     {
         public static readonly string OnlyPersonal = "Apenas personals podem prescrever treino!";
+        public static readonly string NotFound = "Treino não encontrado!(Apenas o criador do treino tem permissão para altera-lo)";
     }
 
     public static class User
