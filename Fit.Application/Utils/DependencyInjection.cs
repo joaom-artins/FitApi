@@ -23,6 +23,8 @@ public static partial class DependencyInjection
         services.AddScoped<IWorkoutService, WorkoutService>();
         services.AddScoped<IExerciseService, ExerciseService>();
 
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
         return services;
     }
 }
