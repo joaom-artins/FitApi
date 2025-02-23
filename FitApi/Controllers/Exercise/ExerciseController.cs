@@ -2,7 +2,7 @@ using Fit.Application.DTOs.Requests.Exercise;
 using Fit.Application.Interfaces.IServices.Exercise;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FitApi.Controllers.Exercise;
+namespace Fit.API.Controllers.Exercise;
 
 [ApiController]
 [Route("v1/workouts/{workoutId}/exercises")]
