@@ -70,4 +70,26 @@ public class ExerciseService(
 
         return true;
     }
+
+    public async Task<bool> UpdateAsync(Guid id, Guid workoutId, ExerciseUpdateRequest request)
+    {
+        var record = await _exerciseRepository.GetByIdAndWorkoutAndCreatorAsync(id, workoutId, _getLoggedUser.GetId());
+        if (record is null)
+        {
+            _notificationContext.SetDetails(
+                statusCode: StatusCodes.Status404NotFound,
+                title: NotificationTitle.NotFound,
+                detail: NotificationMessage.Exercise.NotFound
+            );
+            return false;
+        }
+
+        record.Reps = request.Reps;
+        record.Exercise = request.Exercise;
+        record.Series = request.Series;
+        _exerciseRepository.Update(record);
+        await _unitOfWork.CommitAsync();
+
+        return true;
+    }
 }

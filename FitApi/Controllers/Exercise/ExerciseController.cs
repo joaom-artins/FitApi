@@ -18,6 +18,14 @@ public class ExerciseController(
         return NoContent();
     }
 
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromRoute] Guid workoutId, [FromBody] ExerciseUpdateRequest request)
+    {
+        await _exerciseService.UpdateAsync(id, workoutId, request);
+
+        return NoContent();
+    }
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> RemoveToWorkot([FromRoute] Guid id, [FromRoute] Guid workoutId)
     {
