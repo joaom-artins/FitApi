@@ -48,7 +48,7 @@ public class ExerciseService(
             return false;
         }
 
-        var exercises = await _exerciseRepository.FindByIdAndWorkoutAndCreatorAsync(workoutId, _getLoggedUser.GetId());
+        var exercises = await _exerciseRepository.FindByWorkoutAndCreatorAsync(workoutId, _getLoggedUser.GetId());
         int order = exercises.Count() + 1;
 
         await CreateAsync(workoutId, request, (byte)order);
@@ -56,9 +56,77 @@ public class ExerciseService(
         return true;
     }
 
+    public async Task<bool> UpdateAsync(Guid id, Guid workoutId, ExerciseUpdateRequest request)
+    {
+        var record = await _exerciseRepository.GetByIdAndWorkoutAndCreatorAsync(id, workoutId, _getLoggedUser.GetId());
+        if (record is null)
+        {
+            _notificationContext.SetDetails(
+                statusCode: StatusCodes.Status404NotFound,
+                title: NotificationTitle.NotFound,
+                detail: NotificationMessage.Exercise.NotFound
+            );
+            return false;
+        }
+
+        record.Reps = request.Reps;
+        record.Exercise = request.Exercise;
+        record.Series = request.Series;
+        _exerciseRepository.Update(record);
+        await _unitOfWork.CommitAsync();
+
+        return true;
+    }
+
+    public async Task<bool> ChangeOrderAsync(Guid workoutId, ExerciseChangeOrderRequest request)
+    {
+        var exercises = await _exerciseRepository.FindByWorkoutAndCreatorAsync(workoutId, _getLoggedUser.GetId());
+        if (!exercises.Any())
+        {
+            _notificationContext.SetDetails(
+                statusCode: StatusCodes.Status404NotFound,
+                title: NotificationTitle.NotFound,
+                detail: NotificationMessage.Exercise.NotFound
+            );
+            return false;
+        }
+
+        var exerciseIds = exercises.Select(x => x.Id).ToList();
+        var requestIds = request.ExerciseId.ToList();
+
+        var allIds = exerciseIds.All(id => requestIds.Contains(id));
+
+        if (!allIds)
+        {
+            _notificationContext.SetDetails(
+                statusCode: StatusCodes.Status400BadRequest,
+                title: NotificationTitle.BadRequest,
+                detail: NotificationMessage.Exercise.MissingIds
+            );
+            return false;
+        }
+
+        _unitOfWork.BeginTransaction();
+
+        byte order = 1;
+        foreach (var exerciseId in request.ExerciseId)
+        {
+            var exercise = exercises.FirstOrDefault(x => x.Id == exerciseId);
+            exercise!.Order = order;
+            _exerciseRepository.Update(exercise);
+            await _unitOfWork.CommitAsync();
+
+            order++;
+        }
+
+        await _unitOfWork.CommitAsync(true);
+
+        return true;
+    }
+
     public async Task<bool> RemoveToWorkoutAsync(Guid id, Guid workoutId)
     {
-        var exercises = await _exerciseRepository.FindByIdAndWorkoutAndCreatorAsync(workoutId, _getLoggedUser.GetId());
+        var exercises = await _exerciseRepository.FindByWorkoutAndCreatorAsync(workoutId, _getLoggedUser.GetId());
         if (!exercises.Any())
         {
             _notificationContext.SetDetails(
@@ -94,28 +162,6 @@ public class ExerciseService(
 
         _exerciseRepository.Remove(exerciseToExclude);
         await _unitOfWork.CommitAsync(true);
-
-        return true;
-    }
-
-    public async Task<bool> UpdateAsync(Guid id, Guid workoutId, ExerciseUpdateRequest request)
-    {
-        var record = await _exerciseRepository.GetByIdAndWorkoutAndCreatorAsync(id, workoutId, _getLoggedUser.GetId());
-        if (record is null)
-        {
-            _notificationContext.SetDetails(
-                statusCode: StatusCodes.Status404NotFound,
-                title: NotificationTitle.NotFound,
-                detail: NotificationMessage.Exercise.NotFound
-            );
-            return false;
-        }
-
-        record.Reps = request.Reps;
-        record.Exercise = request.Exercise;
-        record.Series = request.Series;
-        _exerciseRepository.Update(record);
-        await _unitOfWork.CommitAsync();
 
         return true;
     }

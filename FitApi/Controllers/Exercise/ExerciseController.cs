@@ -26,6 +26,14 @@ public class ExerciseController(
         return NoContent();
     }
 
+    [HttpPatch("change-order")]
+    public async Task<IActionResult> ChangeOrder([FromRoute] Guid workoutId, [FromBody] ExerciseChangeOrderRequest request)
+    {
+        await _exerciseService.ChangeOrderAsync(workoutId, request);
+
+        return NoContent();
+    }
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> RemoveToWorkot([FromRoute] Guid id, [FromRoute] Guid workoutId)
     {

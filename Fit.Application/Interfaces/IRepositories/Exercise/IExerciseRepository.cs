@@ -4,6 +4,6 @@ namespace Fit.Application.Interfaces.IRepositories.Exercise;
 
 public interface IExerciseRepository : IGenericRepository<ExerciseModel>
 {
-    Task<IEnumerable<ExerciseModel>> FindByIdAndWorkoutAndCreatorAsync(Guid workoutId, Guid userId);
+    Task<IEnumerable<ExerciseModel>> FindByWorkoutAndCreatorAsync(Guid workoutId, Guid userId);
     Task<ExerciseModel?> GetByIdAndWorkoutAndCreatorAsync(Guid id, Guid workoutId, Guid userId);
 }

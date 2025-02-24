@@ -29,5 +29,6 @@ public class NotificationMessage
     public static class Exercise
     {
         public static readonly string NotFound = "Exercício não encontrado!";
+        public static readonly string MissingIds = "É necessário passas todos os exercicios para ordena-los!";
     }
 }
