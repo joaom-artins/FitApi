@@ -12,6 +12,11 @@ public class ExerciseRepository(
 {
     private readonly AppDbContext _context = context;
 
+    public async Task<IEnumerable<ExerciseModel>> FindByIdAndWorkoutAndCreatorAsync(Guid workoutId, Guid userId)
+    {
+        return await _context.Excersises.AsNoTracking().Where(x => x.WorkoutId == workoutId && x.Workout.CreatedById == userId).ToListAsync();
+    }
+
     public async Task<ExerciseModel?> GetByIdAndWorkoutAndCreatorAsync(Guid id, Guid workoutId, Guid userId)
     {
         return await _context.Excersises.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id && x.WorkoutId == workoutId && x.Workout.CreatedById == userId);

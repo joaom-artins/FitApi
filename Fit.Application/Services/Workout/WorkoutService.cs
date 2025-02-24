@@ -61,9 +61,11 @@ public class WorkoutService(
         await _workoutRepository.AddAsync(record);
         await _unitOfWork.CommitAsync();
 
+        byte order = 1;
         foreach (var exercise in request.Exercises)
         {
-            await _exerciseService.CreateAsync(record.Id, exercise);
+            await _exerciseService.CreateAsync(record.Id, exercise, order);
+            order++;
         }
 
         await _unitOfWork.CommitAsync(true);
