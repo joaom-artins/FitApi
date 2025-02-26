@@ -1,4 +1,6 @@
+using AutoMapper;
 using Fit.Application.DTOs.Requests.Workout;
+using Fit.Application.DTOs.Responses.Workout;
 using Fit.Application.Interfaces;
 using Fit.Application.Interfaces.IRepositories;
 using Fit.Application.Interfaces.IRepositories.User;
@@ -15,6 +17,7 @@ namespace Fit.Application.Services.Workout;
 
 public class WorkoutService(
     IGetLoggedUser _getLoggedUser,
+    IMapper _mapper,
     INotificationContext _notificationContext,
     IUnitOfWork _unitOfWork,
     IWorkoutRepository _workoutRepository,
@@ -22,6 +25,22 @@ public class WorkoutService(
     IUserRepository _userRepository
 ) : IWorkoutService
 {
+    public async Task<WorkoutGetByIdResponse> GetByIdAsync(Guid id)
+    {
+        var workout = await _workoutRepository.GetByIdAndUserAsync(id, _getLoggedUser.GetId());
+        if (workout is null)
+        {
+            _notificationContext.SetDetails(
+                statusCode: StatusCodes.Status404NotFound,
+                title: NotificationTitle.NotFound,
+                detail: NotificationMessage.Workout.NotFound
+            );
+            return default!;
+        }
+
+        return _mapper.Map<WorkoutGetByIdResponse>(workout);
+    }
+
     public async Task<bool> CreateAsync(WorkoutCreateRequest request)
     {
         if (!request.IsForYou)

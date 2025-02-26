@@ -17,8 +17,8 @@ public class WorkoutRepository(
         return await _context.Workouts.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id && x.CreatedById == userId);
     }
 
-    public async Task<IEnumerable<WorkoutModel>> GetByIdAndUserWithExerciseAsync(Guid id, Guid userId)
+    public async Task<WorkoutModel?> GetByIdAndUserWithExerciseAsync(Guid id, Guid userId)
     {
-        return await _context.Workouts.AsNoTracking().Where(x => x.Id == id && (x.CreatedById == userId || x.ForId == userId)).Include(x => x.Exercises).ToListAsync();
+        return await _context.Workouts.AsNoTracking().Include(x => x.Exercises).SingleOrDefaultAsync(x => x.Id == id && (x.CreatedById == userId || x.ForId == userId));
     }
 }
