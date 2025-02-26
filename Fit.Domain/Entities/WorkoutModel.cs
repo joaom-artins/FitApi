@@ -13,4 +13,5 @@ public class WorkoutModel
     public UserModel For { get; set; } = default!;
     public Guid ForId { get; set; }
     public DaysOfWeekEnum DaysOfWeek { get; set; }
+    public ICollection<ExerciseModel> Exercises { get; set; } = [];
 }
