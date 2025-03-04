@@ -27,7 +27,7 @@ public class WorkoutService(
 {
     public async Task<WorkoutGetByIdResponse> GetByIdAsync(Guid id)
     {
-        var workout = await _workoutRepository.GetByIdAndUserAsync(id, _getLoggedUser.GetId());
+        var workout = await _workoutRepository.GetByIdAndUserWithExerciseAsync(id, _getLoggedUser.GetId());
         if (workout is null)
         {
             _notificationContext.SetDetails(
@@ -37,6 +37,8 @@ public class WorkoutService(
             );
             return default!;
         }
+
+        workout.Exercises = workout.Exercises.OrderBy(x => x.Order).ToList();
 
         return _mapper.Map<WorkoutGetByIdResponse>(workout);
     }
@@ -108,6 +110,25 @@ public class WorkoutService(
         record.Name = request.Name;
         record.DaysOfWeek = request.DaysOfWeek;
         _workoutRepository.Update(record);
+        await _unitOfWork.CommitAsync();
+
+        return true;
+    }
+
+    public async Task<bool> DeleteAsync(Guid id)
+    {
+        var record = await _workoutRepository.GetByIdAnCreatorAsync(id, _getLoggedUser.GetId());
+        if (record is null)
+        {
+            _notificationContext.SetDetails(
+                statusCode: StatusCodes.Status404NotFound,
+                title: NotificationTitle.NotFound,
+                detail: NotificationMessage.Workout.NotFound
+            );
+            return false;
+        }
+
+        _workoutRepository.Remove(record);
         await _unitOfWork.CommitAsync();
 
         return true;

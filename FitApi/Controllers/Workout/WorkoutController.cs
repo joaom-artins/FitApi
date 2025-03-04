@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fit.Api.Controllers.Workout;
 
 [ApiController]
-[Route("v1/workout")]
+[Route("v1/workouts")]
 public class WorkoutController(
     IWorkoutService _workoutService
 ) : ControllerBase
@@ -31,6 +31,14 @@ public class WorkoutController(
     public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] WorkoutUpdateRequest request)
     {
         await _workoutService.UpdateAsync(id, request);
+
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
+    {
+        await _workoutService.DeleteAsync(id);
 
         return NoContent();
     }

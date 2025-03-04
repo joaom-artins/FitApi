@@ -2,9 +2,9 @@ namespace Fit.Domain.Enums;
 
 public enum RepsEnum
 {
-    UntilFailure = 0,
-    SixToEight = 1,
-    EightToTen = 2,
-    TenToTwelven = 3,
-    TwelveToFifteen = 4
+    UntilFailure = 1,
+    SixToEight = 2,
+    EightToTen = 3,
+    TenToTwelven = 4,
+    TwelveToFifteen = 5
 }
