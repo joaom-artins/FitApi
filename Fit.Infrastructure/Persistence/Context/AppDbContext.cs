@@ -24,9 +24,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
 
         modelBuilder.Entity<WorkoutModel>()
             .HasOne(w => w.For)
-            .WithOne()
-            .HasForeignKey<WorkoutModel>(w => w.ForId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .WithMany()
+            .HasForeignKey(w => w.ForId)
+            .OnDelete(DeleteBehavior.NoAction);
 
         modelBuilder.Entity<UserModel>().ToTable("Users");
         modelBuilder.Entity<IdentityRole<Guid>>().ToTable("Roles");

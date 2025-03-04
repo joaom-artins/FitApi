@@ -13,6 +13,7 @@ public class AutoMapper : Profile
         CreateMap<UserModel, UserBaseResponse>();
 
         CreateMap<WorkoutModel, WorkoutGetByIdResponse>();
+        CreateMap<WorkoutModel, WorkoutFindResponse>();
 
         CreateMap<ExerciseModel, ExerciseWorkoutGetByIdResponse>();
     }

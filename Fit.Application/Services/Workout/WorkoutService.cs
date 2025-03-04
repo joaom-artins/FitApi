@@ -25,6 +25,15 @@ public class WorkoutService(
     IUserRepository _userRepository
 ) : IWorkoutService
 {
+    public async Task<IEnumerable<WorkoutFindResponse>> FindAsync()
+    {
+        var workouts = await _workoutRepository.FindByUserAsync(_getLoggedUser.GetId());
+
+        workouts = workouts.OrderBy(x => x.DaysOfWeek);
+
+        return _mapper.Map<IEnumerable<WorkoutFindResponse>>(workouts);
+    }
+
     public async Task<WorkoutGetByIdResponse> GetByIdAsync(Guid id)
     {
         var workout = await _workoutRepository.GetByIdAndUserWithExerciseAsync(id, _getLoggedUser.GetId());

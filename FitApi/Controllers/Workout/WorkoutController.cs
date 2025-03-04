@@ -11,6 +11,14 @@ public class WorkoutController(
     IWorkoutService _workoutService
 ) : ControllerBase
 {
+    [HttpGet]
+    public async Task<IActionResult> Find()
+    {
+        var result = await _workoutService.FindAsync();
+
+        return Ok(result);
+    }
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {

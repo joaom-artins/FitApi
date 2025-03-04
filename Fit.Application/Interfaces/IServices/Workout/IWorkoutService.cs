@@ -5,6 +5,7 @@ namespace Fit.Application.Interfaces.IServices.Workout;
 
 public interface IWorkoutService
 {
+    Task<IEnumerable<WorkoutFindResponse>> FindAsync();
     Task<WorkoutGetByIdResponse> GetByIdAsync(Guid id);
     Task<bool> CreateAsync(WorkoutCreateRequest request);
     Task<bool> UpdateAsync(Guid id, WorkoutUpdateRequest request);
